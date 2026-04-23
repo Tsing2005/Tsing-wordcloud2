@@ -44,13 +44,23 @@ html, body, [class*="css"], .stApp {
     margin-bottom: 10px; display: block; text-align: left;
     width: 100%; max-width: 720px;
 }
+
+/* ── 卡片包裹层（相对定位，让透明按钮绝对覆盖） */
+.card-wrap {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
 .card {
-    flex: 1; min-width: 280px; max-width: 400px;
+    width: 100%;
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.07);
     border-radius: 20px; padding: 36px 32px;
     position: relative; overflow: hidden;
     transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    box-sizing: border-box;
+    cursor: pointer;
 }
 .card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
 .card-wc  { border-top: 2px solid #6366f1; }
@@ -69,7 +79,6 @@ html, body, [class*="css"], .stApp {
     background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%);
     pointer-events: none;
 }
-/* ✅ 图标全宽，与按钮等宽 */
 .card-icon {
     font-size: 2rem; margin-bottom: 18px;
     display: flex; justify-content: flex-start; align-items: center;
@@ -77,12 +86,34 @@ html, body, [class*="css"], .stApp {
 }
 .card-title { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
 .card-desc { font-size: 0.85rem; color: rgba(226,232,240,0.45); line-height: 1.75; margin-bottom: 24px; }
-.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 28px; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
 .tag {
     background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
     border-radius: 6px; padding: 3px 10px;
     font-size: 0.72rem; color: rgba(226,232,240,0.4);
 }
+
+/* ── 透明覆盖按钮，绝对定位撑满整个 card-wrap */
+div[data-testid="stButton"] > button {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 20px !important;
+    background: transparent !important;
+    border: none !important;
+    color: transparent !important;
+    font-size: 0 !important;
+    cursor: pointer !important;
+    z-index: 10 !important;
+    padding: 0 !important;
+}
+div[data-testid="stButton"] > button:hover {
+    background: rgba(255,255,255,0.03) !important;
+    opacity: 1 !important;
+    transform: none !important;
+}
+
 .flow-bar {
     display: flex; align-items: center; justify-content: center;
     gap: 0; margin-top: 64px; flex-wrap: wrap;
@@ -109,17 +140,6 @@ html, body, [class*="css"], .stApp {
     border-color: rgba(99,102,241,0.5) !important;
     box-shadow: 0 0 0 3px rgba(99,102,241,0.1) !important;
 }
-
-/* 按钮 */
-div[data-testid="stButton"] > button {
-    width: 100% !important; border-radius: 10px !important;
-    font-weight: 600 !important; font-size: 0.88rem !important;
-    padding: 12px 0 !important; border: none !important;
-    transition: opacity 0.2s, transform 0.15s !important;
-}
-div[data-testid="stButton"] > button:hover {
-    opacity: 0.88 !important; transform: translateY(-1px) !important;
-}
 </style>
 """, unsafe_allow_html=True)
 
@@ -135,7 +155,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── 文本输入（窄边距）────────────────────────────────────────
+# ── 文本输入 ──────────────────────────────────────────────────
 _, col_input, _ = st.columns([1, 20, 1])
 with col_input:
     st.markdown('<span class="input-label">粘贴文本内容</span>', unsafe_allow_html=True)
@@ -145,57 +165,63 @@ with col_input:
         height=180, value=st.session_state.get("shared_text", default_text),
         placeholder="在此粘贴论文摘要、正文或任意文字内容..."
     )
-    # 无条件同步，确保跳转前已写入
     st.session_state["shared_text"] = text_input
 
-# ── 功能卡片（窄边距）────────────────────────────────────────
+# ── 功能卡片 ──────────────────────────────────────────────────
 _, col_cards, _ = st.columns([1, 20, 1])
 with col_cards:
     col1, col2 = st.columns(2, gap="large")
 
     with col1:
+        # 卡片 HTML
         st.markdown("""
-        <div class="card card-wc">
-          <div class="card-glow-wc"></div>
-          <div class="card-icon">☁️</div>
-          <div class="card-title">词云生成器</div>
-          <div class="card-desc">
-            输入任意文本，自动分词并生成高清词云图。
-            支持自定义形状掩码、多种配色方案，
-            以及 AI 智能生成专属剪影轮廓，一键导出 PNG / PDF。
-          </div>
-          <div class="tag-row">
-            <span class="tag">自动分词</span>
-            <span class="tag">AI 生成掩码</span>
-            <span class="tag">8 种配色</span>
-            <span class="tag">PNG / PDF</span>
+        <div class="card-wrap">
+          <div class="card card-wc">
+            <div class="card-glow-wc"></div>
+            <div class="card-icon">☁️</div>
+            <div class="card-title">词云生成器</div>
+            <div class="card-desc">
+              输入任意文本，自动分词并生成高清词云图。
+              支持自定义形状掩码、多种配色方案，
+              以及 AI 智能生成专属剪影轮廓，一键导出 PNG / PDF。
+            </div>
+            <div class="tag-row">
+              <span class="tag">自动分词</span>
+              <span class="tag">AI 生成掩码</span>
+              <span class="tag">8 种配色</span>
+              <span class="tag">PNG / PDF</span>
+            </div>
           </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("进入词云生成器 →", key="btn_wc", use_container_width=True):
+        # 透明按钮覆盖整张卡片
+        if st.button("词云", key="btn_wc", use_container_width=True):
             st.session_state["shared_text"] = text_input
             st.switch_page("pages/wordcloud_page.py")
 
     with col2:
         st.markdown("""
-        <div class="card card-vos">
-          <div class="card-glow-vos"></div>
-          <div class="card-icon">🕸️</div>
-          <div class="card-title">VOSviewer 知识图谱</div>
-          <div class="card-desc">
-            自动计算关键词共现矩阵，生成符合 VOSviewer
-            标准的网络数据集，直接在页面内嵌的交互式
-            图谱中可视化词与词之间的语义关联。
-          </div>
-          <div class="tag-row">
-            <span class="tag">共现矩阵</span>
-            <span class="tag">网络可视化</span>
-            <span class="tag">JSON 导出</span>
-            <span class="tag">交互式图谱</span>
+        <div class="card-wrap">
+          <div class="card card-vos">
+            <div class="card-glow-vos"></div>
+            <div class="card-icon">🕸️</div>
+            <div class="card-title">VOSviewer 知识图谱</div>
+            <div class="card-desc">
+              自动计算关键词共现矩阵，生成符合 VOSviewer
+              标准的网络数据集，直接在页面内嵌的交互式
+              图谱中可视化词与词之间的语义关联。
+            </div>
+            <div class="tag-row">
+              <span class="tag">共现矩阵</span>
+              <span class="tag">网络可视化</span>
+              <span class="tag">JSON 导出</span>
+              <span class="tag">交互式图谱</span>
+            </div>
           </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("进入知识图谱分析 →", key="btn_vos", use_container_width=True):
+        # 透明按钮覆盖整张卡片
+        if st.button("知识图谱", key="btn_vos", use_container_width=True):
             st.session_state["shared_text"] = text_input
             st.switch_page("pages/vosviewer_page.py")
 
