@@ -234,7 +234,7 @@ with st.expander("🎨 设计参数配置", expanded=True):
         fonts_dir = os.path.join(ROOT_DIR, "fonts")
         font_files = [f for f in os.listdir(fonts_dir)
                       if f.lower().endswith(('.ttf', '.otf', '.ttc'))] if os.path.exists(fonts_dir) else []
-                if font_files:
+        if font_files:
             selected_font = st.selectbox("选择字体", font_files, label_visibility="collapsed")
             font_p = os.path.join(fonts_dir, selected_font)
         else:
