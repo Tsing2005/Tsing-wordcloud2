@@ -1,0 +1,6 @@
+streamlit
+jieba
+wordcloud
+Pillow
+numpy
+openai
