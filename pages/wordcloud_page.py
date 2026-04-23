@@ -32,7 +32,12 @@ html, body, [class*="css"], .stApp {
 .block-container {
     padding-top: 0 !important;
     padding-bottom: 40px !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    max-width: 1100px !important;
+    margin: 0 auto !important;
 }
+
 
 .page-header-outer {
     position: relative;
@@ -229,12 +234,36 @@ with st.expander("🎨 设计参数配置", expanded=True):
         fonts_dir = os.path.join(ROOT_DIR, "fonts")
         font_files = [f for f in os.listdir(fonts_dir)
                       if f.lower().endswith(('.ttf', '.otf', '.ttc'))] if os.path.exists(fonts_dir) else []
-        if font_files:
+                if font_files:
             selected_font = st.selectbox("选择字体", font_files, label_visibility="collapsed")
             font_p = os.path.join(fonts_dir, selected_font)
         else:
-            st.warning("⚠️ 未检测到 fonts 文件夹中的字体")
-            font_p = st.text_input("字体路径", value=get_default_font())
+            st.warning("⚠️ 未检测到 fonts 文件夹中的字体，将使用系统兜底字体")
+            font_p = get_default_font()
+
+        # 兜底：如果路径不存在，自动找一个系统可用字体
+        if font_p and not os.path.exists(font_p):
+            st.warning(f"字体文件不存在: {font_p}，已自动切换到系统字体")
+            font_p = None  # WordCloud 会使用内置字体
+
+        if font_p is None:
+            _candidates = [
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+                "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+                "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf",
+                "/System/Library/Fonts/Supplemental/Arial.ttf",
+                "/Library/Fonts/Arial.ttf",
+                "C:/Windows/Fonts/arial.ttf",
+            ]
+            import matplotlib, os as _os
+            _candidates.append(_os.path.join(
+                matplotlib.get_data_path(), "fonts", "ttf", "DejaVuSans-Bold.ttf"
+            ))
+            for _c in _candidates:
+                if _os.path.exists(_c):
+                    font_p = _c
+                    break
+
 
         st.markdown('<span class="section-label">字体大小</span>', unsafe_allow_html=True)
         min_f_size = st.slider("最小字体", 4, 100, 12)
