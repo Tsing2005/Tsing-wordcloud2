@@ -69,10 +69,11 @@ html, body, [class*="css"], .stApp {
     background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%);
     pointer-events: none;
 }
-/* ✅ 修复图标居中 */
+/* ✅ 图标全宽，与按钮等宽 */
 .card-icon {
     font-size: 2rem; margin-bottom: 18px;
     display: flex; justify-content: flex-start; align-items: center;
+    width: 100%;
 }
 .card-title { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
 .card-desc { font-size: 0.85rem; color: rgba(226,232,240,0.45); line-height: 1.75; margin-bottom: 24px; }
@@ -156,7 +157,7 @@ with col_cards:
         st.markdown("""
         <div class="card card-wc">
           <div class="card-glow-wc"></div>
-          <span class="card-icon">☁️</span>
+          <div class="card-icon">☁️</div>
           <div class="card-title">词云生成器</div>
           <div class="card-desc">
             输入任意文本，自动分词并生成高清词云图。
@@ -179,7 +180,7 @@ with col_cards:
         st.markdown("""
         <div class="card card-vos">
           <div class="card-glow-vos"></div>
-          <span class="card-icon">🕸️</span>
+          <div class="card-icon">🕸️</div>
           <div class="card-title">VOSviewer 知识图谱</div>
           <div class="card-desc">
             自动计算关键词共现矩阵，生成符合 VOSviewer
