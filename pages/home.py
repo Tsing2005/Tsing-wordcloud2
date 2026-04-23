@@ -42,91 +42,48 @@ html, body, [class*="css"], .stApp {
     font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
     text-transform: uppercase; color: rgba(226,232,240,0.28);
     margin-bottom: 10px; display: block; text-align: left;
-    width: 100%; max-width: 720px;
-}
-
-/* ── 卡片包裹层（相对定位，让透明按钮绝对覆盖） */
-.card-wrap {
-    position: relative;
-    border-radius: 20px;
-    overflow: hidden;
-}
-
-.card {
-    width: 100%;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 20px; padding: 36px 32px;
-    position: relative; overflow: hidden;
-    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-    box-sizing: border-box;
-    cursor: pointer;
-}
-.card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
-.card-wc  { border-top: 2px solid #6366f1; }
-.card-wc:hover  { border-color: #818cf8; box-shadow: 0 24px 60px rgba(99,102,241,0.2); }
-.card-vos { border-top: 2px solid #10b981; }
-.card-vos:hover { border-color: #34d399; box-shadow: 0 24px 60px rgba(16,185,129,0.2); }
-.card-glow-wc {
-    position: absolute; top: -60px; right: -60px;
-    width: 180px; height: 180px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
-    pointer-events: none;
-}
-.card-glow-vos {
-    position: absolute; top: -60px; right: -60px;
-    width: 180px; height: 180px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%);
-    pointer-events: none;
-}
-.card-icon {
-    font-size: 2rem; margin-bottom: 18px;
-    display: flex; justify-content: flex-start; align-items: center;
     width: 100%;
 }
-.card-title { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
-.card-desc { font-size: 0.85rem; color: rgba(226,232,240,0.45); line-height: 1.75; margin-bottom: 24px; }
-.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-.tag {
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
-    border-radius: 6px; padding: 3px 10px;
-    font-size: 0.72rem; color: rgba(226,232,240,0.4);
-}
 
-/* ── 透明覆盖按钮，绝对定位撑满整个 card-wrap */
-div[data-testid="stButton"] > button {
-    position: absolute !important;
-    inset: 0 !important;
+/* ── 把按钮本身做成卡片 ── */
+div[data-testid="stButton"].card-wc-btn > button,
+div[data-testid="stButton"].card-vos-btn > button {
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
+    min-height: 320px !important;
     border-radius: 20px !important;
-    background: transparent !important;
-    border: none !important;
-    color: transparent !important;
-    font-size: 0 !important;
-    cursor: pointer !important;
-    z-index: 10 !important;
-    padding: 0 !important;
-}
-div[data-testid="stButton"] > button:hover {
+    padding: 36px 32px !important;
+    text-align: left !important;
+    white-space: pre-wrap !important;
+    line-height: 1.6 !important;
+    font-size: 0.88rem !important;
+    font-weight: 400 !important;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s !important;
+    position: relative !important;
+    overflow: hidden !important;
     background: rgba(255,255,255,0.03) !important;
-    opacity: 1 !important;
-    transform: none !important;
+    border: 1px solid rgba(255,255,255,0.07) !important;
+    color: rgba(226,232,240,0.45) !important;
+    cursor: pointer !important;
 }
-
-.flow-bar {
-    display: flex; align-items: center; justify-content: center;
-    gap: 0; margin-top: 64px; flex-wrap: wrap;
+div[data-testid="stButton"].card-wc-btn > button {
+    border-top: 2px solid #6366f1 !important;
 }
-.flow-step { display: flex; flex-direction: column; align-items: center; padding: 0 20px; text-align: center; }
-.flow-num {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.8rem; font-weight: 600; color: #a5b4fc; margin-bottom: 8px;
+div[data-testid="stButton"].card-vos-btn > button {
+    border-top: 2px solid #10b981 !important;
 }
-.flow-label { font-size: 0.75rem; color: rgba(226,232,240,0.35); line-height: 1.5; }
-.flow-arrow { color: rgba(255,255,255,0.12); font-size: 1.1rem; margin-bottom: 20px; }
+div[data-testid="stButton"].card-wc-btn > button:hover {
+    transform: translateY(-6px) !important;
+    border-color: #818cf8 !important;
+    box-shadow: 0 24px 60px rgba(99,102,241,0.2) !important;
+    background: rgba(255,255,255,0.05) !important;
+}
+div[data-testid="stButton"].card-vos-btn > button:hover {
+    transform: translateY(-6px) !important;
+    border-color: #34d399 !important;
+    box-shadow: 0 24px 60px rgba(16,185,129,0.2) !important;
+    background: rgba(255,255,255,0.05) !important;
+}
 
 /* 文本框 */
 .stTextArea textarea {
@@ -140,6 +97,20 @@ div[data-testid="stButton"] > button:hover {
     border-color: rgba(99,102,241,0.5) !important;
     box-shadow: 0 0 0 3px rgba(99,102,241,0.1) !important;
 }
+
+.flow-bar {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; margin-top: 64px; flex-wrap: wrap; padding-bottom: 60px;
+}
+.flow-step { display: flex; flex-direction: column; align-items: center; padding: 0 20px; text-align: center; }
+.flow-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 600; color: #a5b4fc; margin-bottom: 8px;
+}
+.flow-label { font-size: 0.75rem; color: rgba(226,232,240,0.35); line-height: 1.5; }
+.flow-arrow { color: rgba(255,255,255,0.12); font-size: 1.1rem; margin-bottom: 20px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -167,63 +138,27 @@ with col_input:
     )
     st.session_state["shared_text"] = text_input
 
-# ── 功能卡片 ──────────────────────────────────────────────────
+# ── 功能卡片（按钮即卡片）────────────────────────────────────
 _, col_cards, _ = st.columns([1, 20, 1])
 with col_cards:
     col1, col2 = st.columns(2, gap="large")
 
+    wc_label = "☁️  词云生成器\n\n输入任意文本，自动分词并生成高清词云图。支持自定义形状掩码、多种配色方案，以及 AI 智能生成专属剪影轮廓，一键导出 PNG / PDF。\n\n自动分词   AI 生成掩码   8 种配色   PNG / PDF"
+    vos_label = "🕸️  VOSviewer 知识图谱\n\n自动计算关键词共现矩阵，生成符合 VOSviewer 标准的网络数据集，直接在页面内嵌的交互式图谱中可视化词与词之间的语义关联。\n\n共现矩阵   网络可视化   JSON 导出   交互式图谱"
+
     with col1:
-        # 卡片 HTML
-        st.markdown("""
-        <div class="card-wrap">
-          <div class="card card-wc">
-            <div class="card-glow-wc"></div>
-            <div class="card-icon">☁️</div>
-            <div class="card-title">词云生成器</div>
-            <div class="card-desc">
-              输入任意文本，自动分词并生成高清词云图。
-              支持自定义形状掩码、多种配色方案，
-              以及 AI 智能生成专属剪影轮廓，一键导出 PNG / PDF。
-            </div>
-            <div class="tag-row">
-              <span class="tag">自动分词</span>
-              <span class="tag">AI 生成掩码</span>
-              <span class="tag">8 种配色</span>
-              <span class="tag">PNG / PDF</span>
-            </div>
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
-        # 透明按钮覆盖整张卡片
-        if st.button("词云", key="btn_wc", use_container_width=True):
+        st.markdown('<div class="card-wc-btn">', unsafe_allow_html=True)
+        if st.button(wc_label, key="btn_wc", use_container_width=True):
             st.session_state["shared_text"] = text_input
             st.switch_page("pages/wordcloud_page.py")
+        st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
-        st.markdown("""
-        <div class="card-wrap">
-          <div class="card card-vos">
-            <div class="card-glow-vos"></div>
-            <div class="card-icon">🕸️</div>
-            <div class="card-title">VOSviewer 知识图谱</div>
-            <div class="card-desc">
-              自动计算关键词共现矩阵，生成符合 VOSviewer
-              标准的网络数据集，直接在页面内嵌的交互式
-              图谱中可视化词与词之间的语义关联。
-            </div>
-            <div class="tag-row">
-              <span class="tag">共现矩阵</span>
-              <span class="tag">网络可视化</span>
-              <span class="tag">JSON 导出</span>
-              <span class="tag">交互式图谱</span>
-            </div>
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
-        # 透明按钮覆盖整张卡片
-        if st.button("知识图谱", key="btn_vos", use_container_width=True):
+        st.markdown('<div class="card-vos-btn">', unsafe_allow_html=True)
+        if st.button(vos_label, key="btn_vos", use_container_width=True):
             st.session_state["shared_text"] = text_input
             st.switch_page("pages/vosviewer_page.py")
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # ── 流程条 ───────────────────────────────────────────────────
 st.markdown("""
