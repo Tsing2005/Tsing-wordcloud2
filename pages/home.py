@@ -130,8 +130,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── 文本输入（居中，宽度受限）────────────────────────────────
-_, col_input, _ = st.columns([1, 4, 1])
+# ── 文本输入（全宽）──────────────────────────────────────────
+col_input = st.container()
 with col_input:
     st.markdown('<span class="input-label">粘贴文本内容</span>', unsafe_allow_html=True)
     default_text = "Ageing is accompanied by declining memory function, with extremely heterogeneous manifestation in the human population. Brain-extrinsic factors influencing cognitive decline, such as gastrointestinal signals, have emerged as attractive targets for peripheral interventions, but the underlying mechanisms remain largely unclear. Here, by charting a high-resolution map of microbiome ageing and its functional consequences throughout the lifespan of mice, we identify a mechanism by which inhibition of gut–brain signalling during ageing results in impaired neuronal activation in the hippocampus and loss of memory encoding."
@@ -143,56 +143,54 @@ with col_input:
     # 无条件同步，确保跳转前已写入
     st.session_state["shared_text"] = text_input
 
-# ── 功能卡片 ─────────────────────────────────────────────────
-_, col_cards, _ = st.columns([1, 6, 1])
-with col_cards:
-    col1, col2 = st.columns(2, gap="large")
+# ── 功能卡片（全宽）──────────────────────────────────────────
+col1, col2 = st.columns(2, gap="large")
 
-    with col1:
-        st.markdown("""
-        <div class="card card-wc">
-          <div class="card-glow-wc"></div>
-          <span class="card-icon">☁️</span>
-          <div class="card-title">词云生成器</div>
-          <div class="card-desc">
-            输入任意文本，自动分词并生成高清词云图。
-            支持自定义形状掩码、多种配色方案，
-            以及 AI 智能生成专属剪影轮廓，一键导出 PNG / PDF。
-          </div>
-          <div class="tag-row">
-            <span class="tag">自动分词</span>
-            <span class="tag">AI 生成掩码</span>
-            <span class="tag">8 种配色</span>
-            <span class="tag">PNG / PDF</span>
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("进入词云生成器 →", key="btn_wc", use_container_width=True):
-            st.session_state["shared_text"] = text_input
-            st.switch_page("pages/wordcloud_page.py")
+with col1:
+    st.markdown("""
+    <div class="card card-wc">
+      <div class="card-glow-wc"></div>
+      <span class="card-icon">☁️</span>
+      <div class="card-title">词云生成器</div>
+      <div class="card-desc">
+        输入任意文本，自动分词并生成高清词云图。
+        支持自定义形状掩码、多种配色方案，
+        以及 AI 智能生成专属剪影轮廓，一键导出 PNG / PDF。
+      </div>
+      <div class="tag-row">
+        <span class="tag">自动分词</span>
+        <span class="tag">AI 生成掩码</span>
+        <span class="tag">8 种配色</span>
+        <span class="tag">PNG / PDF</span>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("进入词云生成器 →", key="btn_wc", use_container_width=True):
+        st.session_state["shared_text"] = text_input
+        st.switch_page("pages/wordcloud_page.py")
 
-    with col2:
-        st.markdown("""
-        <div class="card card-vos">
-          <div class="card-glow-vos"></div>
-          <span class="card-icon">🕸️</span>
-          <div class="card-title">VOSviewer 知识图谱</div>
-          <div class="card-desc">
-            自动计算关键词共现矩阵，生成符合 VOSviewer
-            标准的网络数据集，直接在页面内嵌的交互式
-            图谱中可视化词与词之间的语义关联。
-          </div>
-          <div class="tag-row">
-            <span class="tag">共现矩阵</span>
-            <span class="tag">网络可视化</span>
-            <span class="tag">JSON 导出</span>
-            <span class="tag">交互式图谱</span>
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("进入知识图谱分析 →", key="btn_vos", use_container_width=True):
-            st.session_state["shared_text"] = text_input
-            st.switch_page("pages/vosviewer_page.py")
+with col2:
+    st.markdown("""
+    <div class="card card-vos">
+      <div class="card-glow-vos"></div>
+      <span class="card-icon">🕸️</span>
+      <div class="card-title">VOSviewer 知识图谱</div>
+      <div class="card-desc">
+        自动计算关键词共现矩阵，生成符合 VOSviewer
+        标准的网络数据集，直接在页面内嵌的交互式
+        图谱中可视化词与词之间的语义关联。
+      </div>
+      <div class="tag-row">
+        <span class="tag">共现矩阵</span>
+        <span class="tag">网络可视化</span>
+        <span class="tag">JSON 导出</span>
+        <span class="tag">交互式图谱</span>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("进入知识图谱分析 →", key="btn_vos", use_container_width=True):
+        st.session_state["shared_text"] = text_input
+        st.switch_page("pages/vosviewer_page.py")
 
 # ── 流程条 ───────────────────────────────────────────────────
 st.markdown("""
