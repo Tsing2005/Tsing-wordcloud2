@@ -22,7 +22,12 @@ html, body, [class*="css"], .stApp {
 .block-container {
     padding-top: 0 !important;
     padding-bottom: 40px !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    max-width: 1100px !important;
+    margin: 0 auto !important;
 }
+
 
 .page-header-outer {
     position: relative;
