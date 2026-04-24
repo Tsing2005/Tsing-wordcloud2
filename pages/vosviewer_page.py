@@ -28,7 +28,6 @@ html, body, [class*="css"], .stApp {
     margin: 0 auto !important;
 }
 
-
 .page-header-outer {
     position: relative;
     left: 50%; right: 50%;
@@ -94,26 +93,7 @@ div[data-testid="stButton"] > button[kind="primary"]:hover {
     box-shadow: 0 6px 28px rgba(16,185,129,0.45) !important;
     transform: translateY(-2px) !important;
 }
-div[data-testid="stDownloadButton"] > button {
-    background: rgba(16,185,129,0.08) !important;
-    border: 1px solid rgba(16,185,129,0.25) !important;
-    border-radius: 10px !important; color: #6ee7b7 !important;
-    font-weight: 600 !important; width: 100% !important;
-    padding: 13px 0 !important; font-size: 0.9rem !important;
-    transition: all 0.2s !important;
-}
-div[data-testid="stDownloadButton"] > button:hover {
-    background: rgba(16,185,129,0.16) !important;
-    transform: translateY(-1px) !important;
-}
 div[data-testid="stAlert"] { border-radius: 12px !important; border: none !important; }
-.guide-card {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 14px; padding: 18px 22px; margin: 20px 0;
-    font-size: 0.85rem; color: rgba(226,232,240,0.5); line-height: 1.7;
-}
-.guide-card b { color: rgba(226,232,240,0.8); }
 .iframe-wrap {
     border-radius: 16px; overflow: hidden;
     border: 1px solid rgba(255,255,255,0.07); margin-top: 8px;
@@ -199,23 +179,35 @@ if st.button("🚀 生成 VOSviewer 网络视图", type="primary", use_container
         vos_json_str = generate_vosviewer_json(text_area, counts)
         st.success("✅ 图谱数据计算完成！")
 
-        st.download_button(
-            label="📥 1. 点击下载 VOSviewer 数据集 (json格式)",
-            data=vos_json_str,
-            file_name="vosviewer_network.json",
-            mime="application/json"
-        )
-
-        st.markdown("""
-        <div class="guide-card">
-          👇 <b>2. 极简操作指南</b>：下载文件后，在下方软件界面左侧点击
-          <b>Open</b> → 选择 <b>VOSviewer JSON file</b> → 上传刚才下载的文件即可！
-        </div>
-        """, unsafe_allow_html=True)
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <script src="https://unpkg.com/vosviewer-online@1.1.4/dist/vosviewer-online.umd.js"></script>
+          <link rel="stylesheet" href="https://unpkg.com/vosviewer-online@1.1.4/dist/vosviewer-online.css">
+          <style>
+            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+            body {{ background: #080b14; }}
+            #vos-container {{ width: 100%; height: 700px; }}
+          </style>
+        </head>
+        <body>
+          <div id="vos-container"></div>
+          <script>
+            const vosData = {vos_json_str};
+            new VOSviewer(document.getElementById("vos-container"), {{
+              json: vosData,
+              dark_ui: true,
+            }});
+          </script>
+        </body>
+        </html>
+        """
 
         st.markdown('<div class="iframe-wrap">', unsafe_allow_html=True)
-        st.components.v1.iframe(
-            src="https://app.vosviewer.com/?dark_ui=true",
+        st.components.v1.html(
+            html_content,
             height=700,
             scrolling=False
         )
